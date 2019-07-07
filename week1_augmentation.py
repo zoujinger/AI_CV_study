@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
     # plt.subplot(1, 4, 1)
     cv2.imshow('croped', img1)
-    
+
     key = cv2.waitKey(0)
     if key == 27:
         cv2.destroyAllWindows()
