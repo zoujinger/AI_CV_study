@@ -106,12 +106,6 @@ if __name__ == '__main__':
     img2 = random_light_color(img_origin)
     img3 = image_rotation(img_origin)
     img4 = perspective_transform(img_origin)
-    print(img4.shape)
-
-    # for i in range(4):
-    #     plt.subplot(1, 4, i + 1)
-    #     plt.imshow('img'+str(i+1))
-    #     plt.axis('off')
 
     imgs = np.hstack([img2, img3, img4])
     # 展示多个
@@ -119,13 +113,7 @@ if __name__ == '__main__':
 
     # plt.subplot(1, 4, 1)
     cv2.imshow('croped', img1)
-    # plt.subplot(1, 4, 2)
-    # plt.imshow('colored', img2)
-    # plt.subplot(1, 4, 3)
-    # plt.imshow('rotated', img3)
-    # plt.subplot(1, 4, 4)
-    # plt.imshow('perspected', img4)
-    # plt.show()
+    
     key = cv2.waitKey(0)
     if key == 27:
         cv2.destroyAllWindows()
