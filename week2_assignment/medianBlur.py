@@ -53,7 +53,6 @@ def medianBlur(img, kernel, padding_way):
             window_list = [img_pad[x-1, y-1], img_pad[x-1, y], img_pad[x-1, y+1],\
                            img_pad[x,   y-1], img_pad[x,   y], img_pad[x,   y+1],\
                            img_pad[x+1, y-1], img_pad[x+1, y], img_pad[x+1, y+1]]
-            #print(x, y, window_list)
             mm = median(window_list)
             img_blur[x-pad_size0, y-pad_size1] = mm
 
