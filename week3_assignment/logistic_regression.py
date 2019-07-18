@@ -20,7 +20,7 @@ def inference(w, b, x):
 
 def eval_loss(w, b, x, gt_y):
     pred_y = inference(w, b, x)
-    loss = 0.5 * (pred_y - gt_y) ** 2
+    loss = -gt_y * np.log(pred_y) - (1-gt_y) * np.log(1-pred_y)
     avg_loss = sum(loss)/len(gt_y)
     return avg_loss
 
@@ -55,15 +55,19 @@ def gen_sample_data():
     w = np.random.randint(0, 10) + random.random()
     b = np.random.randint(0, 5)  + random.random()
     print('gen_w:{0},gen_b:{1}'.format(w,b))
-    num_sample = 100
+    num_sample = 500
     x = np.random.randint(1, 50, num_sample)
-    y = inference(w, b, x) + random.random() * 5
+    # y = inference(w, b, x) + random.random() * 5
+    #y = inference(w, b, x)
+    #y.astype(int)
+    y = np.random.randint(0, 2, num_sample)
+    print(y[:40])
     return x, y
 
 def run():
     x, y = gen_sample_data()
     batch_size = 50
-    lr = 0.1
+    lr = 0.001
     max_iter = 300
     train(x, y, batch_size, lr, max_iter)
 
