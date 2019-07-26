@@ -15,17 +15,20 @@ def d_sigmoid(x):
     return sigmoid(x) * (1 - sigmoid(x))
 
 def inference(w, b, x):
-    pred_y = sigmoid(w * np.asarray(x) + b)
+    # pred_y = sigmoid(w * np.asarray(x) + b)
+    p = sigmoid(w * np.asarray(x) + b)
+    pred_y = np.asarray([0 if i<0.5 else 1 for i in p])
     return pred_y
 
 def eval_loss(w, b, x, gt_y):
     pred_y = inference(w, b, x)
-    loss = -gt_y * np.log(pred_y) - (1-gt_y) * np.log(1-pred_y)
+    # loss = -gt_y * np.log(pred_y) - (1-gt_y) * np.log(1-pred_y)
+    loss = -gt_y * np.log(sigmoid(w*np.asarray(x)+b)) - (1-gt_y) * np.log(1-sigmoid(w*np.asarray(x)+b))
     avg_loss = sum(loss)/len(gt_y)
     return avg_loss
 
-def gradient(pred_y, gt_y, x):
-    diff = (pred_y - gt_y) * d_sigmoid(np.asarray(x))
+def gradient(pred_y, gt_y, x, w, b):
+    diff = sigmoid(w*np.asarray(x) + b) - gt_y
     dw = diff * x
     db = diff
     return dw, db
@@ -33,7 +36,7 @@ def gradient(pred_y, gt_y, x):
 def cal_step_gradient(batch_x, batch_gt_y, w, b, lr):
     batch_size = len(batch_x)
     pred_y = inference(w, b, batch_x)
-    dw, db = gradient(pred_y, batch_gt_y, batch_x)
+    dw, db = gradient(pred_y, batch_gt_y, batch_x, w, b)
     avg_dw = sum(dw) / batch_size
     avg_db = sum(db) / batch_size
     w -= lr * avg_dw
@@ -52,23 +55,24 @@ def train(x, y, batch_size, lr, max_iter):
         print('loss:', eval_loss(w, b, x, y))
 
 def gen_sample_data():
-    w = np.random.randint(0, 10) + random.random()
-    b = np.random.randint(0, 5)  + random.random()
+    w = np.random.randint(-10, -9) + random.random()
+    b = np.random.randint(200, 250)  + random.random()
     print('gen_w:{0},gen_b:{1}'.format(w,b))
-    num_sample = 500
-    x = np.random.randint(1, 50, num_sample)
+    num_sample = 100
+    x = np.random.randint(0, 50, num_sample)
     # y = inference(w, b, x) + random.random() * 5
     #y = inference(w, b, x)
     #y.astype(int)
-    y = np.random.randint(0, 2, num_sample)
+    p = sigmoid(w * np.asarray(x) + b)
+    y = np.asarray([0 if i < 0.5 else 1 for i in p])
     print(y[:40])
     return x, y
 
 def run():
     x, y = gen_sample_data()
     batch_size = 50
-    lr = 0.001
-    max_iter = 300
+    lr = 0.01
+    max_iter = 8000
     train(x, y, batch_size, lr, max_iter)
 
 if __name__=='__main__':
